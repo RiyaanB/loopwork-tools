@@ -17,7 +17,7 @@ for (const vp of ['desktop', 'mobile']) {
     const info = await page.evaluate(() => ({
       gc: !!document.querySelector('script[data-goatcounter="https://loopwork.goatcounter.com/count"]'),
       privacy: /GoatCounter/.test(document.querySelector('footer')?.textContent || '') && !!document.querySelector('footer a[href$="privacy.html"], footer a[href="./"]'),
-      shop: Array.from(document.querySelectorAll('a')).some((a) => a.href === 'https://loopworkgames.itch.io/' && /Loopwork SFX Pack/.test(a.textContent)),
+      shop: Array.from(document.querySelectorAll('a')).some((a) => a.href === 'https://loopworkgames.itch.io/loopwork-sfx-pack-vol1' && /Loopwork SFX Pack/.test(a.textContent)),
       title: document.title, desc: document.querySelector('meta[name=description]')?.content || '',
       overflow: document.documentElement.scrollWidth > window.innerWidth + 1,
       links: Array.from(document.querySelectorAll('a[href], link[href], script[src], img[src]'))
