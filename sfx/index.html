@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Retro Game Sound Effect Generator (WAV) – Loopwork Tools</title>
+<meta name="description" content="Make 8-bit style coin, jump, hit, explosion, laser and UI sounds in your browser. Seeded and repeatable, exports 16-bit WAV. Nothing is uploaded.">
+<link rel="canonical" href="https://riyaanb.github.io/loopwork-tools/sfx/">
+<meta property="og:title" content="Retro SFX generator – Loopwork Tools">
+<meta property="og:description" content="Seeded 8-bit style game sounds, exported as 16-bit WAV, right in the browser.">
+<meta property="og:image" content="https://riyaanb.github.io/loopwork-tools/og.png">
+<meta property="og:url" content="https://riyaanb.github.io/loopwork-tools/sfx/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f1115">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/style.css">
+<script data-goatcounter="https://loopwork.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="../"><img src="../favicon.svg" alt="" width="26" height="26">Loopwork Tools</a>
+  <nav class="tools" aria-label="Tools">
+    <a href="./" aria-current="page">SFX generator</a>
+    <a href="../resize/">Cover resizer</a>
+    <a href="../sprites/">Sprite slicer</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <h1>Retro sound effect generator</h1>
+  <p class="lede">Pick a sound type, nudge the seed until it sounds right, then download a 16-bit WAV.
+  The same type + seed + settings always gives the same file, so you can write
+  the recipe down (or copy the link) and rebuild the sound later.</p>
+
+  <div class="grid2">
+    <section class="panel stack" aria-label="Sound settings">
+      <div>
+        <span class="small muted" id="typeLabel">Sound type</span>
+        <div class="chips" id="types" role="group" aria-labelledby="typeLabel"></div>
+      </div>
+      <div>
+        <label for="seed">Seed</label>
+        <div class="row" style="flex-wrap:nowrap">
+          <button type="button" id="seedDown" aria-label="Previous seed">−</button>
+          <input type="number" id="seed" min="0" max="4294967295" step="1" value="1">
+          <button type="button" id="seedUp" aria-label="Next seed">+</button>
+        </div>
+      </div>
+      <div>
+        <label for="pitch">Pitch <span class="val" id="pitchVal"></span></label>
+        <input type="range" id="pitch" min="0.5" max="2" step="0.01" value="1">
+      </div>
+      <div>
+        <label for="length">Length <span class="val" id="lengthVal"></span></label>
+        <input type="range" id="length" min="0.25" max="3" step="0.05" value="1">
+      </div>
+      <div>
+        <label for="volume">Peak level <span class="val" id="volumeVal"></span></label>
+        <input type="range" id="volume" min="-24" max="0" step="0.5" value="-1">
+      </div>
+      <div>
+        <label for="noise">Noise <span class="val" id="noiseVal"></span></label>
+        <input type="range" id="noise" min="0" max="1" step="0.01" value="0">
+      </div>
+      <div class="row">
+        <button type="button" id="reset">Reset sliders</button>
+        <button type="button" id="randomize">Randomize</button>
+      </div>
+    </section>
+
+    <section class="panel stack" aria-label="Preview and export">
+      <canvas id="wave" class="wave" width="900" height="160" aria-label="Waveform preview"></canvas>
+      <div class="row">
+        <button type="button" class="primary" id="play">▶ Play</button>
+        <button type="button" id="download">Download WAV</button>
+        <label class="small" style="display:flex;gap:6px;align-items:center;margin-left:auto">
+          <input type="checkbox" id="autoplay" checked> play on change
+        </label>
+      </div>
+      <p class="small muted" id="info" aria-live="polite"></p>
+      <div class="row">
+        <label for="batchN" class="small" style="display:inline">Batch:</label>
+        <input type="number" id="batchN" min="2" max="50" value="10" style="width:80px">
+        <button type="button" id="batch">Download seeds as ZIP</button>
+      </div>
+      <p class="small muted">Batch export writes the current type and settings for N consecutive seeds
+        (starting at the current one) into one ZIP of WAV files.</p>
+      <p class="small">Recipe link: <a id="permalink" href="#">this exact sound</a></p>
+      <p class="status" id="status" aria-live="polite"></p>
+    </section>
+  </div>
+
+  <h2>What each slider does</h2>
+  <ul class="tight">
+    <li><strong>Seed</strong> picks one variation of the type: a slightly different base pitch and, for noisy types (hit, explosion, whoosh), a different noise pattern.</li>
+    <li><strong>Pitch</strong> multiplies the base frequency. Below 1 sounds bigger and heavier, above 1 sounds smaller and brighter.</li>
+    <li><strong>Length</strong> stretches the whole envelope. The shape stays the same, only the timing changes.</li>
+    <li><strong>Peak level</strong> is where the loudest sample lands after normalizing. −1 dBFS leaves a little headroom. Pick something lower if you plan to stack sounds.</li>
+    <li><strong>Noise</strong> mixes white noise into the tone. A little gives coins and lasers some grit. A lot turns a jump into something closer to a swish.</li>
+  </ul>
+
+  <h2>Using the files</h2>
+  <p>Exports are mono, 44.1 kHz, 16-bit PCM WAV. Godot, Unity, GameMaker, Phaser, Defold, Bevy
+    and plain <code>&lt;audio&gt;</code> all load that format directly. If file size matters on the web, convert to OGG/MP3 afterwards
+    (for example <code>ffmpeg -i coin.wav -q:a 4 coin.ogg</code>).</p>
+  <p>Sounds you make here are yours to use in free or commercial projects, with no credit required.
+    The generator is open source (MIT).</p>
+
+  <h2>How it works</h2>
+  <p>Each sound is built one sample at a time from simple oscillators (sine and square), filtered noise
+    and an amplitude envelope, in the style of the classic sfxr tools. The seeded random generator is the
+    same Mersenne Twister Python uses, so with sliders at their defaults this page produces exactly
+    the same samples as the Python script we use to build our own packs. Everything runs in this tab
+    and nothing is uploaded.</p>
+
+  <p class="shop">Want ready-made sounds instead? We sell a pack of these, named, trimmed and sorted by type.
+    <a href="https://loopworkgames.itch.io/" rel="noopener">Get the Loopwork SFX Pack on itch.io</a>.
+    Like this tool, it was made with our own synth code and AI-assisted tooling.</p>
+</main>
+
+<footer class="site"><div class="wrap">
+  <p>Made by Loopwork Games. The tools and pages were built with AI assistance, and every sound is synthesized procedurally by our own code.</p>
+  <p>Privacy: everything runs in your browser and your files never leave your device. We count page views with GoatCounter (no cookies, no personal data). <a href="../privacy.html">Privacy details</a> · <a href="https://github.com/riyaanb/loopwork-tools" rel="noopener">Source (MIT)</a></p>
+</div></footer>
+
+<script src="../assets/sfx.js"></script>
+<script src="../assets/zip.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

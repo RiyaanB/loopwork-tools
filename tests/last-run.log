@@ -1,0 +1,294 @@
+
+=== sfx.test.mjs ===
+sfx: parity with devshop/sfx_gen.py
+  ok   coin:1 bit-exact vs Python (11025 samples, 0 diffs)
+  ok   coin:2 bit-exact vs Python (11025 samples, 0 diffs)
+  ok   coin:3 bit-exact vs Python (11025 samples, 0 diffs)
+  ok   coin:12345 bit-exact vs Python (11025 samples, 0 diffs)
+  ok   jump:1 bit-exact vs Python (13230 samples, 0 diffs)
+  ok   jump:2 bit-exact vs Python (13230 samples, 0 diffs)
+  ok   jump:3 bit-exact vs Python (13230 samples, 0 diffs)
+  ok   jump:12345 bit-exact vs Python (13230 samples, 0 diffs)
+  ok   hit:1 bit-exact vs Python (8820 samples, 0 diffs)
+  ok   hit:2 bit-exact vs Python (8820 samples, 0 diffs)
+  ok   hit:3 bit-exact vs Python (8820 samples, 0 diffs)
+  ok   hit:12345 bit-exact vs Python (8820 samples, 0 diffs)
+  ok   explode:1 bit-exact vs Python (30869 samples, 0 diffs)
+  ok   explode:2 bit-exact vs Python (30869 samples, 0 diffs)
+  ok   explode:3 bit-exact vs Python (30869 samples, 0 diffs)
+  ok   explode:12345 bit-exact vs Python (30869 samples, 0 diffs)
+  ok   powerup:1 bit-exact vs Python (22050 samples, 0 diffs)
+  ok   powerup:2 bit-exact vs Python (22050 samples, 0 diffs)
+  ok   powerup:3 bit-exact vs Python (22050 samples, 0 diffs)
+  ok   powerup:12345 bit-exact vs Python (22050 samples, 0 diffs)
+  ok   click:1 bit-exact vs Python (2646 samples, 0 diffs)
+  ok   click:2 bit-exact vs Python (2646 samples, 0 diffs)
+  ok   click:3 bit-exact vs Python (2646 samples, 0 diffs)
+  ok   click:12345 bit-exact vs Python (2646 samples, 0 diffs)
+  ok   whoosh:1 bit-exact vs Python (22050 samples, 0 diffs)
+  ok   whoosh:2 bit-exact vs Python (22050 samples, 0 diffs)
+  ok   whoosh:3 bit-exact vs Python (22050 samples, 0 diffs)
+  ok   whoosh:12345 bit-exact vs Python (22050 samples, 0 diffs)
+  ok   coin: deterministic, length 11025, peak -1 dBFS
+  ok   jump: deterministic, length 13230, peak -1 dBFS
+  ok   hit: deterministic, length 8820, peak -1 dBFS
+  ok   explode: deterministic, length 30869, peak -1 dBFS
+  ok   powerup: deterministic, length 22050, peak -1 dBFS
+  ok   click: deterministic, length 2646, peak -1 dBFS
+  ok   whoosh: deterministic, length 22050, peak -1 dBFS
+  ok   laser: deterministic, length 9702, peak -1 dBFS
+  ok   pickup: deterministic, length 13230, peak -1 dBFS
+  ok   blip: deterministic, length 3528, peak -1 dBFS
+sfx: browser (desktop)
+  ok   10 sound type buttons
+  ok   GoatCounter script requested (stubbed)
+  ok   in-browser synth bit-exact vs Python for all 28 type/seed cases
+  ok   Web Audio available and play clicked without error
+  ok   download name loopwork_explode_003.wav
+  ok   WAV header: PCM mono 44.1k 16-bit
+  ok   WAV length 30869 samples (expected 30869)
+  ok   downloaded WAV byte-identical to reference synth output
+  ok   downloaded WAV byte-identical to the WAV written by sfx_gen.py
+  ok   length ×2 → 61739 samples
+  ok   coin: WAV 11025 samples
+  ok   jump: WAV 13230 samples
+  ok   hit: WAV 8820 samples
+  ok   explode: WAV 30869 samples
+  ok   powerup: WAV 22050 samples
+  ok   click: WAV 2646 samples
+  ok   whoosh: WAV 22050 samples
+  ok   laser: WAV 9702 samples
+  ok   pickup: WAV 13230 samples
+  ok   blip: WAV 3528 samples
+  ok   randomize + recipe link restores identical settings
+  ok   batch ZIP loopwork_whoosh_seeds_7012-7016.zip: 5 WAVs + recipe
+  ok   no horizontal overflow
+  ok   no console errors
+sfx: browser (mobile)
+  ok   10 sound type buttons
+  ok   GoatCounter script requested (stubbed)
+  ok   in-browser synth bit-exact vs Python for all 28 type/seed cases
+  ok   Web Audio available and play clicked without error
+  ok   download name loopwork_explode_003.wav
+  ok   WAV header: PCM mono 44.1k 16-bit
+  ok   WAV length 30869 samples (expected 30869)
+  ok   downloaded WAV byte-identical to reference synth output
+  ok   downloaded WAV byte-identical to the WAV written by sfx_gen.py
+  ok   length ×2 → 61739 samples
+  ok   coin: WAV 11025 samples
+  ok   jump: WAV 13230 samples
+  ok   hit: WAV 8820 samples
+  ok   explode: WAV 30869 samples
+  ok   powerup: WAV 22050 samples
+  ok   click: WAV 2646 samples
+  ok   whoosh: WAV 22050 samples
+  ok   laser: WAV 9702 samples
+  ok   pickup: WAV 13230 samples
+  ok   blip: WAV 3528 samples
+  ok   randomize + recipe link restores identical settings
+  ok   batch ZIP loopwork_jump_seeds_8304-8308.zip: 5 WAVs + recipe
+  ok   no horizontal overflow
+  ok   no console errors
+sfx: all passed
+
+=== resize.test.mjs ===
+resize: browser (desktop)
+  ok   11 presets incl. custom
+  ok   a preview per preset
+  ok   source dimensions shown
+  ok   PNG sample_1600x1000_itch-cover_630x500.png: 630×500
+  ok   PNG sample_1600x1000_cg-landscape_1920x1080.png: 1920×1080
+  ok   PNG sample_1600x1000_cg-wide_1920x1200.png: 1920×1200
+  ok   PNG sample_1600x1000_cg-portrait_800x1200.png: 800×1200
+  ok   PNG sample_1600x1000_poki-large_1280x720.png: 1280×720
+  ok   PNG sample_1600x1000_poki-square_512x512.png: 512×512
+  ok   PNG sample_1600x1000_poki-small_204x204.png: 204×204
+  ok   PNG sample_1600x1000_steam-header_920x430.png: 920×430
+  ok   PNG sample_1600x1000_steam-header-legacy_460x215.png: 460×215
+  ok   PNG sample_1600x1000_steam-library_600x900.png: 600×900
+  ok   PNG sample_1600x1000_custom-960x540-10_960x540.png: 960×540
+  ok   ZIP sample_1600x1000_store_images.zip has 11 files
+  ok   JPG in ZIP itch-cover: 630×500
+  ok   JPG in ZIP cg-landscape: 1920×1080
+  ok   JPG in ZIP cg-wide: 1920×1200
+  ok   JPG in ZIP cg-portrait: 800×1200
+  ok   JPG in ZIP poki-large: 1280×720
+  ok   JPG in ZIP poki-square: 512×512
+  ok   JPG in ZIP poki-small: 204×204
+  ok   JPG in ZIP steam-header: 920×430
+  ok   JPG in ZIP steam-header-legacy: 460×215
+  ok   JPG in ZIP steam-library: 600×900
+  ok   JPG in ZIP custom-960x540-10: 960×540
+  ok   cover focus top-left keeps the corner content (90,209,199)
+  ok   no horizontal overflow
+  ok   no console errors
+resize: browser (mobile)
+  ok   11 presets incl. custom
+  ok   a preview per preset
+  ok   source dimensions shown
+  ok   PNG sample_1600x1000_itch-cover_630x500.png: 630×500
+  ok   PNG sample_1600x1000_cg-landscape_1920x1080.png: 1920×1080
+  ok   PNG sample_1600x1000_cg-wide_1920x1200.png: 1920×1200
+  ok   PNG sample_1600x1000_cg-portrait_800x1200.png: 800×1200
+  ok   PNG sample_1600x1000_poki-large_1280x720.png: 1280×720
+  ok   PNG sample_1600x1000_poki-square_512x512.png: 512×512
+  ok   PNG sample_1600x1000_poki-small_204x204.png: 204×204
+  ok   PNG sample_1600x1000_steam-header_920x430.png: 920×430
+  ok   PNG sample_1600x1000_steam-header-legacy_460x215.png: 460×215
+  ok   PNG sample_1600x1000_steam-library_600x900.png: 600×900
+  ok   PNG sample_1600x1000_custom-960x540-10_960x540.png: 960×540
+  ok   ZIP sample_1600x1000_store_images.zip has 11 files
+  ok   JPG in ZIP itch-cover: 630×500
+  ok   JPG in ZIP cg-landscape: 1920×1080
+  ok   JPG in ZIP cg-wide: 1920×1200
+  ok   JPG in ZIP cg-portrait: 800×1200
+  ok   JPG in ZIP poki-large: 1280×720
+  ok   JPG in ZIP poki-square: 512×512
+  ok   JPG in ZIP poki-small: 204×204
+  ok   JPG in ZIP steam-header: 920×430
+  ok   JPG in ZIP steam-header-legacy: 460×215
+  ok   JPG in ZIP steam-library: 600×900
+  ok   JPG in ZIP custom-960x540-10: 960×540
+  ok   cover focus top-left keeps the corner content (90,209,199)
+  ok   no horizontal overflow
+  ok   no console errors
+resize: all passed
+
+=== sprites.test.mjs ===
+sprites: browser (desktop)
+  ok   frame-size mode: 7 frames (empty cell skipped)
+  ok   frame rectangles match the generated layout
+  ok   only the active slicing inputs are visible
+  ok   rows×cols mode gives identical frames
+  ok   unchecking "skip empty" keeps all 8 cells
+  ok   animation preview advances (frame 2 / 7 → frame 3 / 7)
+  ok   JSON hero_run_frames.json: 7 frames, first hero_run_00
+  ok   JSON meta (size, spacing, duration)
+  ok   ZIP hero_run_frames.zip: 7 PNG frames at 24×32
+  ok   ZIP includes the JSON
+  ok   exported frame pixels come from the right cell
+  ok   individual PNG download hero_run_00.png 24×32
+  ok   no horizontal overflow
+  ok   no console errors
+sprites: browser (mobile)
+  ok   frame-size mode: 7 frames (empty cell skipped)
+  ok   frame rectangles match the generated layout
+  ok   only the active slicing inputs are visible
+  ok   rows×cols mode gives identical frames
+  ok   unchecking "skip empty" keeps all 8 cells
+  ok   animation preview advances (frame 2 / 7 → frame 3 / 7)
+  ok   JSON hero_run_frames.json: 7 frames, first hero_run_00
+  ok   JSON meta (size, spacing, duration)
+  ok   ZIP hero_run_frames.zip: 7 PNG frames at 24×32
+  ok   ZIP includes the JSON
+  ok   exported frame pixels come from the right cell
+  ok   individual PNG download hero_run_00.png 24×32
+  ok   no horizontal overflow
+  ok   no console errors
+sprites: all passed
+
+=== pages.test.mjs ===
+pages (desktop)
+  ok   index: HTTP 200
+  ok   index: GoatCounter snippet
+  ok   index: footer privacy note
+  ok   index: itch.io shop link
+  ok   index: title + description
+  ok   index: no horizontal overflow
+  ok   index: only relative links
+  ok   link ok: /favicon.svg
+  ok   link ok: /favicon.png
+  ok   link ok: /apple-touch-icon.png
+  ok   link ok: /assets/style.css
+  ok   link ok: /
+  ok   link ok: /sfx/
+  ok   link ok: /resize/
+  ok   link ok: /sprites/
+  ok   link ok: /privacy.html
+  ok   index: no console errors
+  ok   sfx/: HTTP 200
+  ok   sfx/: GoatCounter snippet
+  ok   sfx/: footer privacy note
+  ok   sfx/: itch.io shop link
+  ok   sfx/: title + description
+  ok   sfx/: no horizontal overflow
+  ok   sfx/: only relative links
+  ok   link ok: /assets/sfx.js
+  ok   link ok: /assets/zip.js
+  ok   link ok: /sfx/app.js
+  ok   sfx/: no console errors
+  ok   resize/: HTTP 200
+  ok   resize/: GoatCounter snippet
+  ok   resize/: footer privacy note
+  ok   resize/: itch.io shop link
+  ok   resize/: title + description
+  ok   resize/: no horizontal overflow
+  ok   resize/: only relative links
+  ok   link ok: /resize/app.js
+  ok   resize/: no console errors
+  ok   sprites/: HTTP 200
+  ok   sprites/: GoatCounter snippet
+  ok   sprites/: footer privacy note
+  ok   sprites/: itch.io shop link
+  ok   sprites/: title + description
+  ok   sprites/: no horizontal overflow
+  ok   sprites/: only relative links
+  ok   link ok: /sprites/app.js
+  ok   sprites/: no console errors
+  ok   privacy.html: HTTP 200
+  ok   privacy.html: GoatCounter snippet
+  ok   privacy.html: footer privacy note
+  ok   privacy.html: title + description
+  ok   privacy.html: no horizontal overflow
+  ok   privacy.html: only relative links
+  ok   privacy.html: no console errors
+pages (mobile)
+  ok   index: HTTP 200
+  ok   index: GoatCounter snippet
+  ok   index: footer privacy note
+  ok   index: itch.io shop link
+  ok   index: title + description
+  ok   index: no horizontal overflow
+  ok   index: only relative links
+  ok   index: no console errors
+  ok   sfx/: HTTP 200
+  ok   sfx/: GoatCounter snippet
+  ok   sfx/: footer privacy note
+  ok   sfx/: itch.io shop link
+  ok   sfx/: title + description
+  ok   sfx/: no horizontal overflow
+  ok   sfx/: only relative links
+  ok   sfx/: no console errors
+  ok   resize/: HTTP 200
+  ok   resize/: GoatCounter snippet
+  ok   resize/: footer privacy note
+  ok   resize/: itch.io shop link
+  ok   resize/: title + description
+  ok   resize/: no horizontal overflow
+  ok   resize/: only relative links
+  ok   resize/: no console errors
+  ok   sprites/: HTTP 200
+  ok   sprites/: GoatCounter snippet
+  ok   sprites/: footer privacy note
+  ok   sprites/: itch.io shop link
+  ok   sprites/: title + description
+  ok   sprites/: no horizontal overflow
+  ok   sprites/: only relative links
+  ok   sprites/: no console errors
+  ok   privacy.html: HTTP 200
+  ok   privacy.html: GoatCounter snippet
+  ok   privacy.html: footer privacy note
+  ok   privacy.html: title + description
+  ok   privacy.html: no horizontal overflow
+  ok   privacy.html: only relative links
+  ok   privacy.html: no console errors
+  ok   static file sitemap.xml
+  ok   static file robots.txt
+  ok   static file og.png
+  ok   static file favicon.png
+  ok   static file favicon.svg
+  ok   static file LICENSE
+  ok   static file README.md
+pages: all passed
+
+ALL TEST FILES PASSED

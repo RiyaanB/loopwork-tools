@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Cover &amp; Thumbnail Resizer for itch.io, CrazyGames, Poki, Steam – Loopwork Tools</title>
+<meta name="description" content="Drop one image and get every store size at once: itch.io cover, CrazyGames covers, Poki thumbnails and Steam capsules. Crop or fit, PNG or JPG, runs in your browser.">
+<link rel="canonical" href="https://riyaanb.github.io/loopwork-tools/resize/">
+<meta property="og:title" content="Game cover & thumbnail resizer – Loopwork Tools">
+<meta property="og:description" content="One image in, every store size out. itch.io, CrazyGames, Poki, Steam. Client-side only.">
+<meta property="og:image" content="https://riyaanb.github.io/loopwork-tools/og.png">
+<meta property="og:url" content="https://riyaanb.github.io/loopwork-tools/resize/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f1115">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/style.css">
+<script data-goatcounter="https://loopwork.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="../"><img src="../favicon.svg" alt="" width="26" height="26">Loopwork Tools</a>
+  <nav class="tools" aria-label="Tools">
+    <a href="../sfx/">SFX generator</a>
+    <a href="./" aria-current="page">Cover resizer</a>
+    <a href="../sprites/">Sprite slicer</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <h1>Cover &amp; thumbnail resizer for game stores</h1>
+  <p class="lede">Every portal wants its own image size, and most reject anything that's off by a pixel.
+  Drop in your key art once, tick the sizes you need, set where the crop should centre,
+  and download them all. The image stays on your device.</p>
+
+  <div class="grid2">
+    <section class="panel stack" aria-label="Source and options">
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose an image">
+        <strong>Drop an image here</strong><br>
+        <span class="small">or click to choose, or paste with Ctrl/⌘+V</span>
+      </div>
+      <input type="file" id="file" accept="image/*" class="sr-only">
+      <p class="small muted" id="srcInfo">No image loaded yet.</p>
+
+      <div>
+        <span class="small muted" id="modeLabel">Fit mode</span>
+        <div class="chips" role="group" aria-labelledby="modeLabel">
+          <button type="button" data-mode="cover" aria-pressed="true">Cover (crop to fill)</button>
+          <button type="button" data-mode="contain" aria-pressed="false">Contain (fit, pad edges)</button>
+        </div>
+      </div>
+      <div id="focusBox">
+        <label for="fx">Crop focus, horizontal <span class="val" id="fxVal">50%</span></label>
+        <input type="range" id="fx" min="0" max="1" step="0.01" value="0.5">
+        <label for="fy">Crop focus, vertical <span class="val" id="fyVal">50%</span></label>
+        <input type="range" id="fy" min="0" max="1" step="0.01" value="0.5">
+      </div>
+      <div id="padBox" hidden>
+        <label for="bg">Padding colour</label>
+        <div class="row">
+          <input type="color" id="bg" value="#000000" aria-label="Padding colour">
+          <label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="transparent"> transparent (PNG only)</label>
+        </div>
+      </div>
+      <div class="row">
+        <div style="flex:1">
+          <label for="format">Format</label>
+          <select id="format">
+            <option value="image/png">PNG</option>
+            <option value="image/jpeg">JPG</option>
+          </select>
+        </div>
+        <div style="flex:1" id="qualityBox" hidden>
+          <label for="quality">JPG quality <span class="val" id="qualityVal">92</span></label>
+          <input type="range" id="quality" min="50" max="100" step="1" value="92">
+        </div>
+      </div>
+    </section>
+
+    <section class="panel stack" aria-label="Sizes">
+      <table class="presets">
+        <thead><tr><th scope="col"><span class="sr-only">Include</span></th><th scope="col">Size</th><th scope="col">Pixels</th></tr></thead>
+        <tbody id="presetRows"></tbody>
+      </table>
+      <div class="row">
+        <input type="number" id="cw" min="1" max="8192" placeholder="width" aria-label="Custom width" style="width:100px">
+        <span>×</span>
+        <input type="number" id="ch" min="1" max="8192" placeholder="height" aria-label="Custom height" style="width:100px">
+        <button type="button" id="addCustom">Add custom size</button>
+      </div>
+      <div class="row">
+        <button type="button" id="allOn">Select all</button>
+        <button type="button" id="allOff">Select none</button>
+      </div>
+    </section>
+  </div>
+
+  <h2>Results</h2>
+  <div class="row" style="margin-bottom:12px">
+    <button type="button" class="primary" id="zipAll" disabled>Download selected as ZIP</button>
+    <button type="button" id="eachAll" disabled>Download selected one by one</button>
+  </div>
+  <p class="status" id="status" aria-live="polite"></p>
+  <div class="thumbs" id="thumbs"></div>
+
+  <h2>Notes on the sizes</h2>
+  <ul class="tight" id="notes">
+    <li><strong>itch.io cover (630×500)</strong> is the image shown in browse grids and on your game's embed card. itch accepts other sizes but crops to this ratio, so it's better to choose the crop yourself.</li>
+    <li><strong>CrazyGames</strong> asks for several covers in different orientations. Keep the game title readable at small sizes and leave some breathing room at the edges.</li>
+    <li><strong>Poki</strong> thumbnails show up from huge to tiny. At 204×204, check that the main character or object still reads.</li>
+    <li><strong>Steam</strong> capsule sizes are listed for convenience. Valve's rules about text and logos on capsules matter as much as the pixel size.</li>
+  </ul>
+  <p class="small muted">Portals update their requirements from time to time. Before you submit, check the platform's current developer docs.
+    If a size is missing or wrong here, the custom size box covers you in the meantime.</p>
+
+  <h2>Tips for good crops</h2>
+  <ul class="tight">
+    <li>Start from art at least as big as the largest size you need (1920 px wide for the landscape covers). Upscaling makes things soft.</li>
+    <li>Square and portrait crops cut a lot from a landscape image. Move the focus sliders until the subject sits in the middle of every thumbnail.</li>
+    <li>For pixel art, scale the source up by a whole number first, or use Contain mode with a solid pad colour to avoid blurry, uneven pixels.</li>
+    <li>JPG at 85–92 quality is usually far smaller than PNG for painted or 3D art. Stick with PNG for flat colours and crisp pixel art.</li>
+  </ul>
+
+  <p class="shop">Making a game for these portals? Our sound pack has the coins, jumps and UI clicks most of them need.
+    <a href="https://loopworkgames.itch.io/" rel="noopener">Get the Loopwork SFX Pack on itch.io</a>.
+    The sounds are procedurally synthesized by our own code, and the pack was put together with AI-assisted tooling.</p>
+</main>
+
+<footer class="site"><div class="wrap">
+  <p>Made by Loopwork Games. The tools and pages were built with AI assistance.</p>
+  <p>Privacy: your images are processed in your browser and never uploaded. We count page views with GoatCounter (no cookies, no personal data). <a href="../privacy.html">Privacy details</a> · <a href="https://github.com/riyaanb/loopwork-tools" rel="noopener">Source (MIT)</a></p>
+</div></footer>
+
+<script src="../assets/zip.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

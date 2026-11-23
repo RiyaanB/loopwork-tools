@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sprite Sheet Slicer &amp; Animation Previewer – Loopwork Tools</title>
+<meta name="description" content="Cut a sprite sheet into frames by frame size or rows and columns, with margin and spacing. Preview the animation, export frame JSON and individual PNGs. Runs in your browser.">
+<link rel="canonical" href="https://riyaanb.github.io/loopwork-tools/sprites/">
+<meta property="og:title" content="Sprite sheet slicer – Loopwork Tools">
+<meta property="og:description" content="Slice a sprite sheet, preview the animation, export frame JSON and PNG frames. Client-side only.">
+<meta property="og:image" content="https://riyaanb.github.io/loopwork-tools/og.png">
+<meta property="og:url" content="https://riyaanb.github.io/loopwork-tools/sprites/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f1115">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/style.css">
+<script data-goatcounter="https://loopwork.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="../"><img src="../favicon.svg" alt="" width="26" height="26">Loopwork Tools</a>
+  <nav class="tools" aria-label="Tools">
+    <a href="../sfx/">SFX generator</a>
+    <a href="../resize/">Cover resizer</a>
+    <a href="./" aria-current="page">Sprite slicer</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <h1>Sprite sheet slicer</h1>
+  <p class="lede">Load a sheet, tell it how the grid is laid out, and check the result straight away.
+  The grid is drawn over your sheet and the animation plays at the speed you pick.
+  Export the frame rectangles as JSON for your engine, or the frames as separate PNGs.</p>
+
+  <div class="grid2">
+    <section class="panel stack" aria-label="Sheet and grid settings">
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose a sprite sheet">
+        <strong>Drop a sprite sheet here</strong><br>
+        <span class="small">or click to choose. PNG keeps transparency.</span>
+      </div>
+      <input type="file" id="file" accept="image/*" class="sr-only">
+      <p class="small muted" id="srcInfo">No sheet loaded yet.</p>
+
+      <div>
+        <span class="small muted" id="byLabel">Slice by</span>
+        <div class="chips" role="group" aria-labelledby="byLabel">
+          <button type="button" data-by="size" aria-pressed="true">Frame size</button>
+          <button type="button" data-by="count" aria-pressed="false">Rows × columns</button>
+        </div>
+      </div>
+      <div class="row" id="bySize">
+        <div style="flex:1"><label for="fw">Frame width</label><input type="number" id="fw" min="1" value="32"></div>
+        <div style="flex:1"><label for="fh">Frame height</label><input type="number" id="fh" min="1" value="32"></div>
+      </div>
+      <div class="row" id="byCount" hidden>
+        <div style="flex:1"><label for="cols">Columns</label><input type="number" id="cols" min="1" value="4"></div>
+        <div style="flex:1"><label for="rows">Rows</label><input type="number" id="rows" min="1" value="1"></div>
+      </div>
+      <div class="row">
+        <div style="flex:1"><label for="margin">Margin (px)</label><input type="number" id="margin" min="0" value="0"></div>
+        <div style="flex:1"><label for="spacing">Spacing (px)</label><input type="number" id="spacing" min="0" value="0"></div>
+      </div>
+      <label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="skipEmpty" checked> skip fully transparent frames</label>
+      <div>
+        <label for="name">Name prefix</label>
+        <input type="text" id="name" value="sprite" maxlength="40" autocomplete="off">
+      </div>
+    </section>
+
+    <section class="panel stack" aria-label="Preview">
+      <div class="row" style="align-items:flex-start">
+        <div class="checker" style="border-radius:8px;border:1px solid var(--line);padding:6px">
+          <canvas id="anim" class="pixel" width="128" height="128" aria-label="Animation preview"></canvas>
+        </div>
+        <div class="stack" style="flex:1;min-width:160px">
+          <div>
+            <label for="fps">Speed <span class="val" id="fpsVal">10 fps</span></label>
+            <input type="range" id="fps" min="1" max="30" step="1" value="10">
+          </div>
+          <div>
+            <label for="zoom">Preview zoom <span class="val" id="zoomVal">×4</span></label>
+            <input type="range" id="zoom" min="1" max="8" step="1" value="4">
+          </div>
+          <div class="row">
+            <button type="button" id="playPause">Pause</button>
+            <span class="small muted" id="frameNo" aria-live="off"></span>
+          </div>
+        </div>
+      </div>
+      <div class="scroll checker"><canvas id="sheet" class="pixel" width="10" height="10" aria-label="Sheet with grid overlay"></canvas></div>
+      <p class="small muted" id="gridInfo"></p>
+    </section>
+  </div>
+
+  <h2>Export</h2>
+  <div class="row" style="margin-bottom:10px">
+    <button type="button" class="primary" id="dlJson" disabled>Download frames JSON</button>
+    <button type="button" id="dlZip" disabled>Download frames as ZIP</button>
+    <button type="button" id="dlEach" disabled>Download PNGs one by one</button>
+  </div>
+  <p class="status" id="status" aria-live="polite"></p>
+  <pre class="json" id="json" aria-label="Frame JSON preview"></pre>
+
+  <h2>About the JSON</h2>
+  <p>The JSON lists each frame in reading order (left to right, top to bottom), with its pixel rectangle
+    <code>x, y, w, h</code>, its grid cell <code>col, row</code>, and a <code>duration</code> in milliseconds
+    taken from the preview speed. Most engines can build an animation from this with a few lines of code.
+    Phaser, PixiJS and LÖVE quads all take <code>x, y, w, h</code> directly. In Godot, the rectangles
+    map onto an <code>AtlasTexture</code> region.</p>
+
+  <h2>Margin vs spacing</h2>
+  <p><strong>Margin</strong> is the empty border around the whole sheet. <strong>Spacing</strong> is the gap
+    between neighbouring frames. Tools like Aseprite, TexturePacker and Tiled can add both, and if the grid
+    overlay drifts further off the further right it goes, the spacing is probably wrong. Any frames that only
+    partly fit at the right or bottom edge are left out.</p>
+
+  <p class="shop">Animating something? Your sprites will need sounds too.
+    <a href="https://loopworkgames.itch.io/" rel="noopener">Get the Loopwork SFX Pack on itch.io</a>.
+    The sounds are procedurally synthesized by our own code, and the pack was put together with AI-assisted tooling.</p>
+</main>
+
+<footer class="site"><div class="wrap">
+  <p>Made by Loopwork Games. The tools and pages were built with AI assistance.</p>
+  <p>Privacy: your sprite sheets are processed in your browser and never uploaded. We count page views with GoatCounter (no cookies, no personal data). <a href="../privacy.html">Privacy details</a> · <a href="https://github.com/riyaanb/loopwork-tools" rel="noopener">Source (MIT)</a></p>
+</div></footer>
+
+<script src="../assets/zip.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
